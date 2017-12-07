@@ -9,14 +9,25 @@ html, body
 .whmgr-login label
 {
   color: white;
-  font-weight: lighter;
+}
+
+.btn.btn-primary
+{
+  background-color: #179bd7;
+  width: 100%;
+  font-size: 13px;
+  font-family: 'Open Sans',sans-serif;
+  font-weight: 600;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  text-align: center;
+  text-decoration: none;
 }
 
 .form-control[type='text']
 {
   border: 1px solid #FFF;
   padding: 0 10px;
-  margin: 4px 5px 0 5px;
   border-radius: 4px;
 }
 
