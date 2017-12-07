@@ -50,7 +50,7 @@ echo "Installing NodeJS / NPM";
 apt-get install nodejs;
 apt-get install npm;
 echo "Fixing nodejs alias to node";
-mv /usr/bin/nodejs /usr/bin/node
+cp /usr/bin/nodejs /usr/bin/node
 echo "Installing PM2 via NPM";
 npm install -g pm2
 
