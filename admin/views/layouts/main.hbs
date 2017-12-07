@@ -1,0 +1,33 @@
+<html>
+	<head>
+		<title>{{title}} - WHMGR</title>
+		<link rel='stylesheet' type='text/css' href='/dist/bootstrap.min.css'>
+		<link rel='stylesheet' type='text/css' href='/css/whmgr.core.css'>
+	</head>
+	<body>
+		{{#unless pre_login}}
+			<style>html, body{background-color: white;}</style>
+			<nav class='navbar navbar-default'>
+				<a href='/' class='navbar-brand'>
+					WHMGR
+				</a>
+			</nav>
+			<div class=''>
+				<div class='col-md-8'>
+					{{{body}}}
+				</div>
+				<div class='col-md-4'>
+					<div class='panel panel-default'>
+						<div class='panel-heading'>About this server</div>
+						<div class='panel-body'>
+							{{{get_server_info}}}
+						</div>
+					</div>
+				</div>
+			</div>
+		{{/unless}}
+		{{#if pre_login}}
+			{{{body}}}
+		{{/if}}
+	</body>
+</html>

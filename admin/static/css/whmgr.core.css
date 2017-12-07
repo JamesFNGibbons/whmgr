@@ -1,0 +1,34 @@
+html, body
+{
+  background-color: #293a4a;
+}
+.whmgr-login .wrap
+{
+  margin-top: 150px;
+}
+.whmgr-login label
+{
+  color: white;
+  font-weight: lighter;
+}
+
+.form-control[type='text']
+{
+  border: 1px solid #FFF;
+  padding: 0 10px;
+  margin: 4px 5px 0 5px;
+  border-radius: 4px;
+}
+
+.navbar-default
+{
+  border-radius: 0;
+  background-color: #293a4a;
+  color: white;
+}
+
+.panel.panel-default > .panel-heading
+{
+  background-color: #293a4a;
+  color: white;
+}
