@@ -39,3 +39,5 @@ mongoose.connect('mongodb://localhost/whmgr', { useMongoClient: true });
 mongoose.Promise = global.Promise;
 
 app.use('/',require('./routes/home.js'));
+app.use('/auth', require('./routes/auth.js'));
+app.use('/services', require('./routes/services.js'));

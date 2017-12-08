@@ -14,14 +14,25 @@ html, body
 .btn.btn-primary
 {
   background-color: #179bd7;
-  width: 100%;
   font-size: 13px;
   font-family: 'Open Sans',sans-serif;
   font-weight: 600;
-  padding-top: 7px;
-  padding-bottom: 7px;
   text-align: center;
   text-decoration: none;
+}
+
+.action-icon a
+{
+  font-size: 18px;
+  color: inherit;
+}
+.action-icon a:hover
+{
+  text-decoration: none;
+}
+.action-icon span
+{
+  margin-top: 10px;
 }
 
 .form-control[type='text']

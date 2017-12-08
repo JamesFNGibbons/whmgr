@@ -1,0 +1,25 @@
+<div class='well'>
+  <div class='row'>
+    <div class='col-md-12'>
+      <p class='pull-left'>
+        This feature is used to hard restart the services
+        that power the websites hosted using whmgr.
+      </p>
+      <span class='pull-right'>
+        <form>
+          <input type='hidden' name='action' value='do-restart'>
+          <input type='submit' class='pull-right btn btn-primary' value='Restart Services'>
+        </form>
+      </span>
+    </div>
+  </div>
+</div>
+{{#if restarted}}
+  <div class='alert alert-success'>
+    You have restared the services
+  </div>
+  <span>Service Restart Output: </span>
+  <div class='well'>
+    {{output}}
+  </div>
+{{/if}}
