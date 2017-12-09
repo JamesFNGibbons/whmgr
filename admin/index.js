@@ -4,6 +4,8 @@ const cookieSession = require('cookie-session');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
+const glob = require('glob');
+const path = require('path');
 
 let app = express();
 
@@ -38,6 +40,12 @@ app.set('view engine', '.hbs');
 mongoose.connect('mongodb://localhost/whmgr', { useMongoClient: true });
 mongoose.Promise = global.Promise;
 
+// Build the mongoose database.
+glob.sync('./models/**/*.js' ).forEach( function( file ) {
+  require( path.resolve( file ) );
+});
+
 app.use('/',require('./routes/home.js'));
 app.use('/auth', require('./routes/auth.js'));
 app.use('/services', require('./routes/services.js'));
+app.use('/accounts', require('./routes/accounts.js'));

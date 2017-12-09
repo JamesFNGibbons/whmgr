@@ -26,10 +26,17 @@ sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password passwor
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password my_password'
 sudo apt-get -y install mysql-server
 
+echo "Installing apache2 usedir mods";
+sudo a2enmod usrdir
+sudo service apache2 restart
+
 echo "Installing php";
-sudo apt-get install php
+sudo apt-get install php5
 echo "Restarting apache2 web server";
 sudo service apache2 restart
+
+echo "Installing curl";
+sudo apt-get install php5-curl
 
 echo "Installing php5 mysql"
 sudo apt-get install php5-mysql
@@ -72,6 +79,53 @@ echo "Installing mongodb";
 sudo apt-get install mongodb
 echo "Starting mongodb";
 sudo /etc/init.d/mongodb start
+
+echo "Updating NodeJS Version to latest";
+sudo npm cache clean -f
+sudo npm install -g n
+sudo n version latest
+sudo n latest
+
+echo "Installing vsfpt FTP Server";
+sudo apt-get install vsftpd
+sudo cp /etc/vsftpd.conf /etc/vsftpd.conf.orig
+
+echo "Setting up FTP Firewall";
+sudo ufw status
+sudo ufw allow 20/tcp
+sudo ufw allow 21/tcp
+sudo ufw allow 990/tcp
+sudo ufw allow 40000:50000/tcp
+sudo ufw status
+
+echo "Setting up webmail with apache";
+sudo cp /usr/local/whmgr/defaults/apache/webmail.conf /etc/apache2/sites-available/webmail.conf;
+sudo a2ensite webmail
+sudo service apache2 restart
+
+echo "Setting permissions for the whmgr root directory";
+sudo chmod -R /usr/local/whmgr/root 400
+echo "Allowing file uploads to whmgr root dir";
+sudo chmod -R /usr/local/whmgr/root u+w
+
+echo "Installing Exrim Mail Server";
+sudo sudo apt-get -y install exim4
+echo "Updating mail server settings";
+debconf-set-selections <<CONF
+exim4-config    exim4/dc_other_hostnames        string  $hostnames
+exim4-config    exim4/dc_eximconfig_configtype  select  internet site; mail is sent and received directly using SMTP
+exim4-config    exim4/no_config boolean true
+# rest of the secret sauce omitted...
+CONF
+
+echo "Installing webmail to /var/www/html";
+cd /var/www/html
+wget https://www.rainloop.net/repository/webmail/rainloop-community-latest.zip
+unzip rainloop-community-latest.zip
+rm rainloop-community-latest.zip
+
+echo "Removing the apache ubunbu default splash page";
+rm index.html
 
 echo "Attempting to launch whmgr";
 chmod +x /usr/local/whmgr/service-run.sh

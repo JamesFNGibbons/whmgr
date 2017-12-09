@@ -1,7 +1,7 @@
 #! /usr/local/whmgr/bin/php
 
 <?php
-	
+
 	/**
 	  * This is used to create a new domain.
 	  * @param 1 = The new domain name
@@ -15,14 +15,16 @@
 
 	// Add the new user account
 	print "Setting up the account" . PHP_EOL;
-	shell_exec("useradd -m ".escapeshellcmd($username)." -s /sbin/nologin");
+	shell_exec("adduser --quiet --disabled-password --shell /bin/bash --gecos '$domain' $username");
+	shell_exec('echo "'.$username.':'.$password.'" | chpasswd');
+	shell_exec("echo '$username' >> /etc/vsftpd.allowed_users");
 
 	/**
 	  * Take the default virtualhost zone file,
 	  * and add it to the apache webserver.
 	*/
 	$vhost = file_get_contents('../defaults/apache/vhost.conf');
-	$document_root = "/home/$username/www";
+	$document_root = "/home/$username/public_html";
 	$server_name = $domain;
 	$vhost = str_replace('%doc_root%', $document_root, $vhost);
 	$vhost = str_replace('%server_name%', $server_name, $vhost);
@@ -47,6 +49,10 @@
 	*/
 	print "Enabling the new site" . PHP_EOL;
 	system("a2ensite $domain", $output);
+
+	// Fix the users home dir permissions.
+	print "Setting home directory permissions" . PHP_EOL;
+	system("chmod +rx /home/$username/public_html/*");
 
 	/**
 	  * Reload apache

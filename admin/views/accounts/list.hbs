@@ -1,0 +1,16 @@
+<div class='well'>
+  Client accounts managed by WHMGR
+</div>
+<table class='table table-default'>
+  <th>Username</th>
+  <th>Home Dir</th>
+  {{#each users}}
+    <tr>
+      <td>{{username}}</td>
+      <td>{{homedir}}</td>
+    </tr>
+  {{/each}}
+</table>
+<a href='/' class='btn btn-primary'>
+  Go back
+</a>

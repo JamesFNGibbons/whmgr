@@ -1,0 +1,66 @@
+const router = require('express').Router();
+const exec = require('child_process').exec;
+const linuxUser = require('linux-user');
+const passwd = require('passwd-linux');
+const mongoose = require('mongoose');
+
+router.post('/add', (req, res) => {
+  if(req.session.loggedin){
+    let username = req.body.username;
+    let password = req.body.password;
+    let domain = req.body.domain;
+
+    exec("sudo php /usr/local/whmgr/scripts/add-domain.php " + domain + " " + username + " " + password, (err, out) => {
+      if(err) throw err;
+      else{
+        // Add the account details to the database.
+        const Account = mongoose.model('Accounts');
+        let new_account = new Account({
+          username: username,
+          password: password,
+          domain: domain
+        });
+
+        res.render('accounts/added', {
+          title: "Added new account",
+          output: out
+        });
+      }
+    });
+  }
+});
+
+router.get('/', (req, res) => {
+  if(req.session.loggedin){
+    linuxUser.getUsers((err, users) => {
+      if(err) throw err;
+      else{
+        mongoose.model('users').find((err, users) => {
+          if(err) throw err;
+          else{
+            res.render('accounts/list', {
+              title: "View Users",
+              users: users
+            });  
+          }
+        });
+      }
+    })
+  }
+  else{
+    res.redirect('/');
+  }
+});
+
+router.get('/add', (req, res) => {
+  if(req.session.loggedin){
+    res.render('accounts/add', {
+      title: "Add Account"
+    });
+  }
+  else{
+    res.redirect('/');
+  }
+});
+
+module.exports = router;

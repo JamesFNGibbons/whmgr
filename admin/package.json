@@ -18,6 +18,7 @@
     "express-hbs": "^1.0.4",
     "express-session": "^1.15.5",
     "install": "^0.10.2",
+    "linux-user": "^0.1.0",
     "mongoose": "^4.13.6",
     "mysql": "^2.15.0",
     "npm": "^5.5.1",
