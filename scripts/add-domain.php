@@ -19,6 +19,11 @@
 	shell_exec('echo "'.$username.':'.$password.'" | chpasswd');
 	shell_exec("echo '$username' >> /etc/vsftpd.allowed_users");
 
+	// Create the logs dir within their home dir
+	shell_exec("mkdir /home/$username/logs");
+	shell_exec("touch /home/$username/error.log");
+	shell_exec("sudo chmod -R 755 /home/$username");
+
 	/**
 	  * Take the default virtualhost zone file,
 	  * and add it to the apache webserver.
@@ -28,6 +33,7 @@
 	$server_name = $domain;
 	$vhost = str_replace('%doc_root%', $document_root, $vhost);
 	$vhost = str_replace('%server_name%', $server_name, $vhost);
+	$vhost = str_replace('%username%', $username, $vhost);
 
 	file_put_contents("/etc/apache2/sites-available/$domain.conf", $vhost);
 	print "Created the file \n";
@@ -52,7 +58,9 @@
 
 	// Fix the users home dir permissions.
 	print "Setting home directory permissions" . PHP_EOL;
-	system("chmod +rx /home/$username/public_html/*");
+	system("sudo chmod +rx /home/$username/public_html/*");
+	system("sudo chown -R $username /home/$username");
+	system("sudo chmod 777 /home/$username");
 
 	/**
 	  * Reload apache

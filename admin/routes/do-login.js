@@ -6,7 +6,37 @@ const router = require('express').Router();
   * to login to.
 */
 router.get('/', (req, res) => {
-	res.redirect('/'); 
+	res.redirect('/');
+});
+
+/**
+  * Used to authenticate a user with
+	* phpmyadmin.
+*/
+router.get('/phpmyadmin-auth', (req, res) => {
+	if(req.session.loggedin){
+		if(req.query.db){
+			req.db.collection('databases').find({
+				database: req.query.db
+			}).toArray((err, docs) => {
+				if(err) throw err;
+				else{
+					if(docs.length > 0){
+						req.db.collection('settings').find({name: 'url'}).toArray((err, setting) => {
+							if(err) throw err;
+							else{
+								let url = setting[0].value;
+								let username = docs[0].username;
+								let password = docs[0].password;
+								let pma_connection = `http://${url}/phpmyadmin/index.php?lang=en&server=1&pma_username=${username}&pma_password=${password}`;
+								res.redirect(pma_connection);
+							}
+						});
+					}
+				}
+			});
+		}
+	}
 });
 
 /**

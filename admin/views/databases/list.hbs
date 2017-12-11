@@ -10,7 +10,7 @@
 		You have added a new database.
 	</div>
 {{/if}}
-<div class='row'> 
+<div class='row'>
 	<div class='col-md-4'>
 		<table class='table table-stripped'>
 			<th>Database</th>
@@ -19,6 +19,11 @@
 				<tr>
 					<td>{{database}}</td>
 					<td>{{account}}</td>
+					<td>
+						<a href='/do-login/phpmyadmin-auth?db={{database}}'>
+							PhpMyAdmin
+						</a>
+					</td>
 				</tr>
 			{{/each}}
 		</table>
