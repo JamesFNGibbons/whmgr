@@ -1,0 +1,16 @@
+<div class='well'>
+	Select the database to login to PhpMyAdmin with
+</div>
+<div class='row'>
+	<div class='col-md-4'>
+		<form method='post' action='/clientarea/databases/do-phpmyadmin'>
+			<select class='form-control' name='database'>
+				{{#each databases}}
+					<option value='{{database}}'>{{database}}</option>
+				{{/each}}
+			</select>
+			<br>
+			<input type='submit' class='btn btn-primary pull-right' value='Login to PhpMyAdmin'>
+		</form>
+	</div>
+</div>

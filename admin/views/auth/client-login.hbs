@@ -1,0 +1,33 @@
+<style>html, body {background-color: white;}</style>
+<div class='whmgr-login' style='background-color: white;'>
+  <div class='container wrap'>
+    <div class='col-md-4 col-md-offset-4'>
+      <img src='/img/whmgr-logo-dark.png' width='90%' class='center-block'>
+      <br> <br>
+      {{#if login_error}}
+        <div class='alert alert-danger'>
+          Your login details are incorrect.
+        </div>
+      {{/if}}
+      {{#if is_root}}
+        <div class='alert alert-warning'>
+          This account is a root account, and cannot login to the client area.
+        </div>
+      {{/if}}
+      <form method='post'>
+        <input type='hidden' name='action' value='login'>
+        <div class='form-group'>
+          <label style='color: #293a4a;'>Username</label>
+          <input type='text' name='username' class='form-control'>
+        </div>
+        <div class='form-group'>
+          <label style='color: #293a4a;'>Password</label>
+          <input type='password' name='password' class='form-control'>
+        </div>
+        <div class='form-group'>
+          <input type='submit' class='btn btn-primary form-control' value='Login'>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -9,6 +9,20 @@ router.post('/', (req, res)  => {
 
       // Check if the given password was corrct
       if(response == 'passwordCorrect'){
+        // Set the default root user if not already set
+        req.db.collection('root_users').find({
+          username: req.body.username
+        }).toArray((err, docs) => {
+          if(err) throw err;
+          else{
+            if(docs.length == 0){
+              req.db.collection('root_users').insert({
+                username: req.body.username
+              });
+            }
+          }
+        });
+
         req.session.loggedin = true;
         req.session.username = req.body.username;
         res.redirect('/');

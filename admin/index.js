@@ -53,3 +53,5 @@ app.use('/services', require('./routes/services.js'));
 app.use('/accounts', require('./routes/accounts.js'));
 app.use('/do-login', require('./routes/do-login.js'));
 app.use('/databases', require('./routes/databases.js'));
+app.use('/clientarea', require('./routes/clientarea-home.js'));
+app.use('/clientarea/databases', require('./routes/clientarea-databases.js'));
