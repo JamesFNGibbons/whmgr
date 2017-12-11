@@ -108,21 +108,38 @@ sudo chmod -R /usr/local/whmgr/root 400
 echo "Allowing file uploads to whmgr root dir";
 sudo chmod -R /usr/local/whmgr/root u+w
 
-echo "Installing Exrim Mail Server";
-sudo sudo apt-get -y install exim4
-echo "Updating mail server settings";
-debconf-set-selections <<CONF
-exim4-config    exim4/dc_other_hostnames        string  $hostnames
-exim4-config    exim4/dc_eximconfig_configtype  select  internet site; mail is sent and received directly using SMTP
-exim4-config    exim4/no_config boolean true
-# rest of the secret sauce omitted...
-CONF
+echo "Installing postfix email server";
+echo -n "Please enter the root domain name of this server and press [ENTER]: ";
+read root_domain;
+debconf-set-selections <<< "postfix postfix/mailname string $domain"
+debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'"
+sudo apt-get install -y postfix
+
+echo "Configuring user dir mailboxes";
+sudo postconf -e "home_mailbox = mail/"
+sudo  /etc/init.d/postfix restart
+
+echo "Refining the postfix config settings";
+sudo postconf -e "inet_interfaces = all"
+sudo postconf -e "inet_protocols = all"
+sudo service courier-authdaemon start
+sudo systemctl enable courier-authdaemon
+sudo  /etc/init.d/postfix restart
 
 echo "Installing webmail to /var/www/html";
 cd /var/www/html
 wget https://www.rainloop.net/repository/webmail/rainloop-community-latest.zip
 unzip rainloop-community-latest.zip
 rm rainloop-community-latest.zip
+
+echo "Installing phpmyadmin";
+cd /var/www/html
+wget https://files.phpmyadmin.net/phpMyAdmin/4.7.6/phpMyAdmin-4.7.6-all-languages.zip
+sudo unzip phpMyAdmin-4.7.6-all-languages.zip
+mkdir phpmyadmin
+mv unzip phpMyAdmin-4.7.6-all-languages/* ./phpmyadmin
+rm phpMyAdmin-4.7.6-all-languages.zip
+rm -rf phpMyAdmin-4.7.6-all-languages
 
 echo "Removing the apache ubunbu default splash page";
 rm index.html

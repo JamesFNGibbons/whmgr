@@ -14,8 +14,7 @@ router.post('/add', (req, res) => {
       if(err) throw err;
       else{
         // Add the account details to the database.
-        const Account = mongoose.model('Accounts');
-        let new_account = new Account({
+        req.db.collection('accounts').insert({
           username: username,
           password: password,
           domain: domain
@@ -34,15 +33,12 @@ router.get('/', (req, res) => {
   if(req.session.loggedin){
     linuxUser.getUsers((err, users) => {
       if(err) throw err;
-      else{
-        mongoose.model('users').find((err, users) => {
-          if(err) throw err;
-          else{
-            res.render('accounts/list', {
+      else {
+        req.db.collection('accounts').find().toArray((err, accounts) => {
+          res.render('accounts/list', {
               title: "View Users",
-              users: users
-            });  
-          }
+              users: accounts
+            });
         });
       }
     })

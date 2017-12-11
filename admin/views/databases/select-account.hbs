@@ -1,0 +1,19 @@
+<div class='well'>Select a client account for the new database.</div>
+<div class='row'>
+	<div class='col-md-4'>
+		<form>
+			<div class='form-group'>
+				<label>Select account</label>
+				<select name='username' class='form-control'>
+					{{#each accounts}}
+						<option value='{{username}}'>{{username}}</option>
+					{{/each}}
+				</select>
+				<div class='form-group'>
+					<br>
+					<input type='submit' class='btn btn-primary pull-right' value='Select Client'>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>

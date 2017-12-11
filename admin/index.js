@@ -3,9 +3,10 @@ const exphbs  = require('express-handlebars');
 const cookieSession = require('cookie-session');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const mongoose = require('mongoose');
+const mongo = require('mongodb');
 const glob = require('glob');
 const path = require('path');
+const expressmongodb = require('express-mongo-db');
 
 let app = express();
 
@@ -27,7 +28,10 @@ let hbs = exphbs.create(
 	{
 		defaultLayout: 'main',
 		helpers: {
-			get_server_info: require('./helpers/get-server-info.js')
+			get_server_info: require('./helpers/get-server-info.js'),
+			get_setting: function(name){
+				require('./helpers/get-setting.js')(name, app);
+			}
 		},
 		extname: ".hbs"
 	}
@@ -35,10 +39,8 @@ let hbs = exphbs.create(
 app.engine('.hbs', hbs.engine);
 app.set('view engine', '.hbs');
 
-
 // Setup mongodb
-mongoose.connect('mongodb://localhost/whmgr', { useMongoClient: true });
-mongoose.Promise = global.Promise;
+app.use(expressmongodb('mongodb://localhost/whmgr'))
 
 // Build the mongoose database.
 glob.sync('./models/**/*.js' ).forEach( function( file ) {
@@ -49,3 +51,5 @@ app.use('/',require('./routes/home.js'));
 app.use('/auth', require('./routes/auth.js'));
 app.use('/services', require('./routes/services.js'));
 app.use('/accounts', require('./routes/accounts.js'));
+app.use('/do-login', require('./routes/do-login.js'));
+app.use('/databases', require('./routes/databases.js'));

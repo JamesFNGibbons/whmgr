@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const passwd = require('passwd-linux');
+const os = require('os');
 
 router.post('/', (req, res)  => {
   if(req.body.action && req.body.action == 'login'){
@@ -17,13 +18,58 @@ router.post('/', (req, res)  => {
       }
     })
   }
+
+  if(req.body.action && req.body.action == 'set-domain'){
+    /**
+      * Check if we need to update or insert the
+      * url into the database.
+    */
+    req.db.collection('settings').find({
+      name: 'url'
+    }).toArray((err, insert) => {
+      insert = !(insert.length > 0);
+      if(insert){
+        req.db.collection('settings').insert({
+          name: 'url',
+          value: req.body.url
+        }, (err) => {
+          if(err) throw err;
+          else{
+            res.redirect('/');
+          }
+        });
+      }
+      else{
+        req.db.collection('settings').update({
+          name: 'url',
+          $set : {
+            value: req.body.url
+          }
+        }, (err) => {
+          if(err) throw err;
+          else{
+            res.redirect('/');
+          }
+        });
+      }
+    });
+  }
 });
 
 router.get('/', (req, res) => {
   // Render the login screen if the user is not loggedin
   if(req.session.loggedin){
-    res.render('dash/home', {
-      title: "Dashboard"
+    // Check if we need to get whmgr's url from the user
+    req.db.collection('settings').find({
+      name: "url"
+    }).toArray((err, setting) => {
+
+      let display_domain_selector = !(setting.length > 0);
+      res.render('dash/home', {
+        title: "Dashboard",
+        display_domain_selector: display_domain_selector,
+        the_ip: os.hostname()
+      });
     });
   }
   else{

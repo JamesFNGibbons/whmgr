@@ -1,3 +1,26 @@
+{{#if display_domain_selector}}
+  <div class='modal show'>
+    <div class='modal-dialog'>
+      <div class='modal-content'>
+        <form method='post'>
+          <input type='hidden' name='action' value='set-domain'>
+          <div class='modal-header'>Enter Root Domain Name</div>
+          <div class='modal-body'>
+            <h2>Enter root domain name</h2>
+            <p>Please enter the domain / IP where WHMGR is running.
+            <div class='input-group'>
+              <span class='input-group-addon'>http://</span>
+              <input type='text' name='url' value='{{the_ip}}' class='form-control'>
+            </div>
+          </div>
+          <div class='modal-footer'>
+            <input type='submit' class='btn btn-primary pull-right' value='Save Changes'>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{{/if}}
 <div class='panel panel-default'>
   <div class='panel-heading'>Client Accounts</div>
   <div class='panel-body'>
@@ -12,6 +35,37 @@
         <a href='/accounts/add'>
           <img src='/icons/add-client.svg' width='50px'>
           <span>Create Account</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class='panel panel-default'>
+  <div class='panel-heading'>MYSQL Databases</div>
+  <div class='panel-body'>
+    <div class='row'>
+      <div class='col-md-3 action-icon'>
+        <a target='_blank' href='/do-login/phpmyadmin'>
+          <img src='/icons/phpmyadmin.png' width='50px'>
+          <span>PhpMyAdmin</span>
+        </a>
+      </div>
+      <div class='col-md-3 action-icon'>
+        <a href='/databases/add'>
+          <img src='/icons/add-db.svg' width='50px'>
+          <span>Add Database</span>
+        </a>
+      </div>
+      <div class='col-md-3 action-icon'>
+        <a href='/databases'>
+          <img src='/icons/find-db.svg' width='50px'>
+          <span>List Databases</span>
+        </a>
+      </div>
+      <div class='col-md-3 action-icon'>
+        <a href='/accounts/add'>
+          <img src='/icons/del-db.svg' width='50px'>
+          <span>Delete Database</span>
         </a>
       </div>
     </div>
