@@ -26,6 +26,11 @@ sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password passwor
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password my_password'
 sudo apt-get -y install mysql-server
 
+echo "Setting up mod_rewrite";
+sudo a2enmod rewrite
+sudo service apache2 restart
+
+
 echo "Installing apache2 usedir mods";
 sudo a2enmod usrdir
 sudo service apache2 restart
