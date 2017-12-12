@@ -1,0 +1,31 @@
+<div class='well'>
+	View the databases that have been created, and what users they are
+	assigned to.
+	<a href='/databases/add' class='btn btn-primary pull-right'>
+		Add database
+	</a>
+</div>
+{{#if db_created}}
+	<div class='alert alert-success'>
+		You have added a new database.
+	</div>
+{{/if}}
+<div class='row'>
+	<div class='col-md-4'>
+		<table class='table table-stripped'>
+			<th>Database</th>
+			<th>User</th>
+			{{#each databases}}
+				<tr>
+					<td>{{database}}</td>
+					<td>{{account}}</td>
+					<td>
+						<a href='/clientarea/databases/do-phpmyadmin?db={{database}}'>
+							PhpMyAdmin
+						</a>
+					</td>
+				</tr>
+			{{/each}}
+		</table>
+	</div>
+</div>
