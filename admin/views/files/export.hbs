@@ -5,16 +5,24 @@
 	</a>
 </div>
 <div class='row'>
-	<div class='col-md-4'>
-		<table class='table table-striped'> 
+	<div class='col-md-5'>
+		<table class='table table-striped'>
 			<th>Export Title</th>
 			<th>Action</th>
+			<th></th>
 			{{#each exports}}
 				<tr>
 					<td>{{this}}</td>
 					<td>
+						<form method='post' action='/clientarea/export-delete'>
+							<input type='hidden' name='account' value='{{../account}}'>
+							<input type='hidden' name='export' value='{{this}}'>
+							<input type='submit' class='btn btn-danger' value='Delete'>
+						</form>
+					</td>
+					<td>
 						<form method='post' action='/clientarea/export-get'>
-							<input type='hidden' name='account' value='{{account}}'>
+							<input type='hidden' name='account' value='{{../account}}'>
 							<input type='hidden' name='export' value='{{this}}'>
 							<input type='submit' class='btn btn-primary' value='Download'>
 						</form>
@@ -28,10 +36,10 @@
 			</div>
 		{{/if}}
 	</div>
-	<div class='col-md-4'>
+	<div class='col-md-7'>
 		<div class='well'>
 			<h3 style='margin: 0; padding: 0;'>Export your files</h3>
-			<p>Export your files to a zip archive, and download them to 
+			<p>Export your files to a zip archive, and download them to
 			   your computer.</p>
 			<form method='post'>
 				<input type='submit' class='btn btn-primary btn-lg' value='Export Data'>

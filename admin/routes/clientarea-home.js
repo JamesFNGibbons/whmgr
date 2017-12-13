@@ -60,10 +60,30 @@ router.post('/export-files', (req, res) => {
 		exec(`sudo bash /usr/local/whmgr/scripts/export.sh ${account}`, (err, export_path) => {
 			if(err) throw err;
 			else{
-				res.sendFile(export_path);
-				res.redirect('/clientarea/export-files');	
+				res.redirect('/clientarea/export-files');
 			}
 		});
+	}
+	else{
+		res.redirect('/');
+	}
+});
+
+/**
+  * Route used to delete a users
+	* exported data.
+*/
+router.post('/export-delete', (req, res) => {
+	if(req.session.client_loggedin){
+		let username = req.body.account;
+		let export_file = req.body.export;
+		if(fs.existsSync(`/home/${username}/exports/${export_file}`)){
+			fs.unlink(`/home/${username}/exports/${export_file}`);
+			res.redirect('/clientarea/export-files');
+		}
+		else{
+			res.redirect('/clientarea/export-files');
+		}
 	}
 	else{
 		res.redirect('/');
@@ -77,11 +97,10 @@ router.post('/export-files', (req, res) => {
 router.post('/export-get', (req, res) => {
 	if(req.session.client_loggedin){
 		let account = req.body.account;
-		account = 'bespoke2';
 		let export_file = req.body.export;
 		res.sendFile(`/home/${account}/exports/${export_file}`);	}
 	else{
-		res.redirect('/'); 
+		res.redirect('/');
 	}
 });
 
