@@ -18,6 +18,9 @@ if [ -f /etc/redhat-release ]; then
   exit
 fi
 
+echo "Updating your system"
+sudo apt-get update;
+
 echo "Attempting to install apache2 web server";
 apt-get install apache2
 echo "Done installing apache2 web server";
@@ -29,7 +32,6 @@ sudo apt-get -y install mysql-server
 echo "Setting up mod_rewrite";
 sudo a2enmod rewrite
 sudo service apache2 restart
-
 
 echo "Installing apache2 usedir mods";
 sudo a2enmod usrdir
@@ -72,7 +74,7 @@ apt-get install git
 echo "Creating directories";
 mkdir /usr/local/whmgr
 echo "Downloading whmgr through git";
-cd /uar/local/whmgr
+cd /usr/local/whmgr
 git init
 git pull https://github.com/JamesFNGibbons/whmgr.git master
 
@@ -137,6 +139,9 @@ wget https://www.rainloop.net/repository/webmail/rainloop-community-latest.zip
 unzip rainloop-community-latest.zip
 rm rainloop-community-latest.zip
 
+echo "Installing unzip"
+sudo apt-get install unzip
+
 echo "Installing phpmyadmin";
 cd /var/www/html
 wget https://files.phpmyadmin.net/phpMyAdmin/4.7.6/phpMyAdmin-4.7.6-all-languages.zip
@@ -145,6 +150,15 @@ mkdir phpmyadmin
 mv unzip phpMyAdmin-4.7.6-all-languages/* ./phpmyadmin
 rm phpMyAdmin-4.7.6-all-languages.zip
 rm -rf phpMyAdmin-4.7.6-all-languages
+
+echo "Installing web filemanager";
+cd /var/www/html
+mkdir filemanager
+wget https://downloads.sourceforge.net/project/quixplorer/unstable/2.4.1%20beta/quixplorer-2.4.1beta.zipx
+sudo unzip net2ftp_v1.1.zip
+rm net2ftp_v1.1.zip
+mv net2ftp_v1.1/files_to_upload/* ./filemanager
+rm -rf ./net2ftp_v1.1
 
 echo "Removing the apache ubunbu default splash page";
 rm index.html

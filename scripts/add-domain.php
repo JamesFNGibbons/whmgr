@@ -21,6 +21,8 @@
 
 	// Create the logs dir within their home dir
 	shell_exec("mkdir /home/$username/logs");
+	shell_exec("mkdir /home/$username/exports");
+	shell_exec("mkdir /home/$username/backups");
 	shell_exec("touch /home/$username/error.log");
 	shell_exec("sudo chmod -R 755 /home/$username");
 

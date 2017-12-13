@@ -1,4 +1,6 @@
 const router = require('express').Router();
+const fs = require('fs');
+const exec = require('child_process').exec;
 
 /**
   * Route used to check the login of a user.
@@ -15,17 +17,90 @@ router.post('/', (req, res) => {
 			else{
 				// Check if the user is a root account
 				if(docs.length > 0){
-					res.render('auth/client-login', {
-						title: "Login",
-						pre_login: true,
-						is_root: true
-					});
 				}
 				else{
 					req.session.client_loggedin = true;
 					req.session.client_username = username;
 					res.redirect('/clientarea');
 				}
+			}
+		});
+	}
+	else{
+		res.redirect('/');
+	}
+});
+
+/**
+  * Route used to display the export
+  * files controls.
+*/
+router.get('/export-files', (req, res) => {
+	if(req.session.client_loggedin){
+		let account = req.session.client_username;
+		res.render('files/export', {
+			title: "Export Files",
+			exports: fs.readdirSync(`/home/${account}/exports`),
+			no_exports: !(fs.readdirSync(`/home/${account}/exports`).length > 0),
+			account: account
+		});
+	}
+	else{
+		res.redirect('/');
+	}
+});
+
+/**
+  * Route used to export and save the
+  * users data.
+*/
+router.post('/export-files', (req, res) => {
+	if(req.session.client_loggedin){
+		let account = req.session.client_username;
+		exec(`sudo bash /usr/local/whmgr/scripts/export.sh ${account}`, (err, export_path) => {
+			if(err) throw err;
+			else{
+				res.sendFile(export_path);
+				res.redirect('/clientarea/export-files');	
+			}
+		});
+	}
+	else{
+		res.redirect('/');
+	}
+});
+
+/**
+  * Route used to get a users exported
+  * data.
+*/
+router.post('/export-get', (req, res) => {
+	if(req.session.client_loggedin){
+		let account = req.body.account;
+		account = 'bespoke2';
+		let export_file = req.body.export;
+		res.sendFile(`/home/${account}/exports/${export_file}`);	}
+	else{
+		res.redirect('/'); 
+	}
+});
+
+/**
+  * Route used to get the ftp connection
+  * details.
+*/
+router.get('/ftp-details', (req, res) => {
+	if(req.session.client_loggedin){
+		req.db.collection('settings').find({
+			name: 'url'
+		}).toArray((err, setting) => {
+			if(err) throw err;
+			else{
+				res.render('dash/ftp', {
+					title: "FTP Details",
+					url: setting[0].value,
+					username: req.session.client_username
+				});
 			}
 		});
 	}

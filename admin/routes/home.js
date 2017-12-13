@@ -82,16 +82,22 @@ router.get('/', (req, res) => {
       res.render('dash/home', {
         title: "Dashboard",
         display_domain_selector: display_domain_selector,
-        the_ip: os.hostname()
+        the_ip: os.hostname(),
+        client_loggedin: req.session.client_loggedin
       });
     });
   }
   else{
-    res.render('auth/login', {
-      title: "Login",
-      login_error: req.query.login_error,
-      pre_login: true
-    });
+    if(req.session.client_loggedin){
+      res.redirect('/clientarea');
+    }
+    else{
+      res.render('auth/login', {
+        title: "Login",
+        login_error: req.query.login_error,
+        pre_login: true
+      });
+    }
   }
 });
 

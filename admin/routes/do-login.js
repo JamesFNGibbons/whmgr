@@ -40,6 +40,36 @@ router.get('/phpmyadmin-auth', (req, res) => {
 });
 
 /**
+  * Used to authenticate a user to the
+  * online filemanager.
+*/
+router.get('/filemanager', (req, res) => {
+	if(req.session.client_loggedin){
+		// Get the account info
+		req.db.collection('accounts').find({
+			username: req.session.client_username
+		}).toArray((err, docs) => {
+			if(err) throw err;
+			else{
+				console.log(docs);
+				if(docs.length > 0){
+					let account = docs[0];
+					let username = account.username;
+					let password = account.password;
+					res.redirect(`http://192.168.0.24/filemanager?username=${username}&password=${password}`);
+				}
+				else{
+					res.end('Invalid account sent.');
+				}
+			}
+		});
+	}
+	else{
+		res.redirect('/');
+	}
+});
+
+/**
   * Used to take the user to the phpmyadmin
   * login screen.
 */

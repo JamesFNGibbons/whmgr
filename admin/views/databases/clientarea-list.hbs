@@ -10,19 +10,40 @@
 		You have added a new database.
 	</div>
 {{/if}}
+{{#if deleted}}
+	<div class='alert alert-success'>
+		You have deleted a database.
+		<a class='close' href='/clientarea/databases'>
+			&times;
+		</a>
+	</div>
+{{/if}}
 <div class='row'>
-	<div class='col-md-4'>
+	<div class='col-md-12'>
 		<table class='table table-stripped'>
 			<th>Database</th>
-			<th>User</th>
+			<th>Database User</th>
+			<th></th>
+			<th></th>
 			{{#each databases}}
 				<tr>
 					<td>{{database}}</td>
-					<td>{{account}}</td>
+					<td>{{username}}</td>
 					<td>
 						<a href='/clientarea/databases/do-phpmyadmin?db={{database}}'>
 							PhpMyAdmin
 						</a>
+					</td>
+					<td>
+						<a href='/clientarea/databases/connection-info?db={{database}}'>
+							Connection Info
+						</a>
+					</td>
+					<td>
+						<form method='post' action='/clientarea/databases/delete'>
+							<input type='hidden' name='database' value='{{database}}'>
+							<input type='submit' class='btn btn-danger btn-sm' value='Delete'> 
+						</form>
 					</td>
 				</tr>
 			{{/each}}

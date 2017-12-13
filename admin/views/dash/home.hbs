@@ -21,6 +21,27 @@
     </div>
   </div>
 {{/if}}
+{{#if client_loggedin}}
+  <div class='modal show' data-backdrop="static" data-keyboard="false">
+    <div class='modal-dialog'>
+      <div class='modal-content'>
+          <div class='modal-header'>Loggedin to clientarea</div>
+          <div class='modal-body'>
+            You are loggedin to a client account, 
+            please logout before using whmgr admin. 
+          </div>
+          <div class='modal-footer'>
+            <a href='/auth/client-logout' class='btn btn-primary'>
+              Logout client
+            </a>
+            <a href='/clientarea' class='btn btn-primary'>
+              Goto client area
+            </a>
+          </div>
+      </div>
+    </div>
+  </div>
+{{/if}}
 <div class='panel panel-default'>
   <div class='panel-heading'>Client Accounts</div>
   <div class='panel-body'>

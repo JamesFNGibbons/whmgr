@@ -3,9 +3,19 @@
 </div>
 <div class='row'>
 	<div class='col-md-5'>
+		{{#if username_length}}
+			<div class='alert alert-danger'>
+				Your username must not be greated than 16 characters.
+			</div>
+		{{/if}}
+		{{#if database_length}}
+			<div class='alert alert-danger'>
+				Your database name must not be greated than 16 characters.
+			</div>
+		{{/if}}
 		<form method='post'>
 			<label>Database Name</label>
-			<div class='input-group'>
+			<div class='input-group {{#if database_length}}has-error{{/if}}'>
 				<span class='input-group-addon'>
 					{{username}}
 					_db_
@@ -14,7 +24,7 @@
 			</div>
 			<br>
 			<label>Database Username</label>
-			<div class='input-group'>
+			<div class='input-group {{#if username_length}}has-error{{/if}}'>
 				<span class='input-group-addon'>
 					{{username}}
 					_du_
