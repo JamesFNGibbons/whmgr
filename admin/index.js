@@ -55,3 +55,4 @@ app.use('/do-login', require('./routes/do-login.js'));
 app.use('/databases', require('./routes/databases.js'));
 app.use('/clientarea', require('./routes/clientarea-home.js'));
 app.use('/clientarea/databases', require('./routes/clientarea-databases.js'));
+app.use('/clientarea/backups', require('./routes/backups.js'));
