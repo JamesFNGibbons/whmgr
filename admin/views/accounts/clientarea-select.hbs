@@ -1,0 +1,22 @@
+<div class='page-header'>
+	<h2>Select Client</h2>
+</div>
+<div class='well'>
+	Select a client to access the clientarea with.
+	<a class='btn btn-primary pull-right' href='/'>
+		Go back
+	</a>
+</div>
+<div class='row'>
+	<div class='col-md-4'>
+		<form method="post">
+			<select name='account' class='form-control'>
+				{{#each accounts}}
+					<option value='{{username}}'>{{username}}</option>
+				{{/each}}
+			</select>
+			<br>
+			<input type='submit' class='btn btn-primary pull-right' value='Goto Clientarea'>
+		</form>
+	</div>
+</div>

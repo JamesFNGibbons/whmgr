@@ -47,6 +47,7 @@ glob.sync('./models/**/*.js' ).forEach( function( file ) {
   require( path.resolve( file ) );
 });
 
+<<<<<<< HEAD
 
 if(whmgr.License.is_valid()){
 	app.use('/',require('./routes/home.js'));
@@ -63,3 +64,14 @@ if(whmgr.License.is_valid()){
 else{
 	app.use('/*', require('./routes/invalid-license.js'));
 }
+=======
+app.use('/',require('./routes/home.js'));
+app.use('/auth', require('./routes/auth.js'));
+app.use('/services', require('./routes/services.js'));
+app.use('/accounts', require('./routes/accounts.js'));
+app.use('/do-login', require('./routes/do-login.js'));
+app.use('/databases', require('./routes/databases.js'));
+app.use('/clientarea', require('./routes/clientarea-home.js'));
+app.use('/clientarea/databases', require('./routes/clientarea-databases.js'));
+app.use('/clientarea/backups', require('./routes/backups.js'));
+>>>>>>> 74980fc4e684929215f2ce587485459ca6bab7db
