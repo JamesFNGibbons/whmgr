@@ -58,6 +58,8 @@ if(whmgr.License.is_valid()){
 	app.use('/clientarea', require('./routes/clientarea-home.js'));
 	app.use('/clientarea/databases', require('./routes/clientarea-databases.js'));
 	app.use('/clientarea/email', require('./routes/email.js'));
+	app.use('/clientarea/backups', require('./routes/backups.js'));
+	app.use('/clientarea/logs', require('./routes/logs.js'));
 }
 else{
 	app.use('/*', require('./routes/invalid-license.js'));

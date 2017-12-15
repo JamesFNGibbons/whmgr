@@ -32,12 +32,43 @@ router.post('/', (req, res) => {
 });
 
 /**
+  * Route used to show the client their
+  * billings.
+*/
+router.get('/billing', (req, res) => {
+	if(req.session.client_loggedin){
+		req.db.collection('bills').find({
+			account: req.session.client_username
+		}).toArray((err, bills) => {
+			if(err) throw err;
+			else{
+				res.render('billing/clientarea-view', {
+					title: "Bills",
+					bills: bills
+				});
+			}
+		});
+	}
+	else{
+		res.redirect('/');
+	}
+});
+
+/**
   * Route used to display the export
   * files controls.
 */
 router.get('/export-files', (req, res) => {
 	if(req.session.client_loggedin){
 		let account = req.session.client_username;
+
+		// Create the users exports folder if it does not exist.
+		if(!fs.existsSync(`/home/${account}/exports`)){
+			fs.mkdir(`/home/${account}/exports`, (err) => {
+				if(err) throw err;
+			});
+		}
+
 		res.render('files/export', {
 			title: "Export Files",
 			exports: fs.readdirSync(`/home/${account}/exports`),

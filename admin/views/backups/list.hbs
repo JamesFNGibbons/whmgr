@@ -8,6 +8,22 @@
 	</a>
 </div>
 <div class='row'>
+	{{#if deleted}}
+		<div class='alert alert-success'>
+			You have deleted a backup.
+			<a class='close' href='/clientarea/backups'>
+				&times;
+			</a>
+		</div>
+	{{/if}}
+	{{#if restored}}
+		<div class='alert alert-success'>
+			You have restored a backup.
+			<a class='close' href='/clientarea/backups'>
+				&times;
+			</a>
+		</div>
+	{{/if}}
 	<div class='col-md-5'>
 		<div class='page-header'>
 			<h4>Saved Backups</h4>
@@ -17,11 +33,36 @@
 		{{/if}}
 		<table class='table table-striped'>
 			<th>Backup Name</th>
+			<th></th>
+			<th></th>
 			{{#each backups}}
 				<tr>
 					<td>{{this}}</td>
+					<td>
+						<form method='post' action='/clientarea/backups/delete'>
+							<input type='hidden' name='backup' value='{{this}}'>
+							<input type='submit' class='btn btn-danger' value='Delete'>
+						</form>
+					</td>
+					<td>
+						<form method='post' action='/clientarea/backups/restore'>
+							<input type='hidden' name='backup' value='{{this}}'>
+							<input type='submit' class='btn btn-primary' value='Restore'>
+						</form>
+					</td>
 				</tr>
 			{{/each}}
 		</table>
+	</div>
+	<div class='col-md-7'>
+		<div class='well'>
+			<h2>Create a new data backup point</h2>
+			Use this feature to create a new backup point,
+			where you can restore your data from.
+			<br><br>
+			<a href='/clientarea/backups/do-backup' class='btn btn-primary'>
+				Create Backup
+			</a>
+		</div>
 	</div>
 </div>
