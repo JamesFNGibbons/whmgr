@@ -20,7 +20,7 @@ router.post('/', (req, res) => {
 				}
 				else{
 					req.session.client_loggedin = true;
-					req.session.client_username = username;
+					req.session.client_username = username,
 					res.redirect('/clientarea');
 				}
 			}
@@ -141,9 +141,23 @@ router.get('/logout', (req, res) => {
 */
 router.get('/', (req, res) => {
 	if(req.session.client_loggedin){
-		res.render('dash/clientarea-home', {
-			title: "Clientarea"
-		})
+		req.db.collection('bills').find({
+			account: req.session.client_username
+		}).toArray((err, bills) => {
+			if(err) throw err;
+			else{
+				req.db.collection('accounts').find().toArray((err, clients) => {
+					res.render('dash/clientarea-home', {
+						title: "Clientarea",
+						admin_loggedin: req.session.loggedin,
+						admin_username: req.session.username,
+						client_username: req.session.client_username,
+						clients: clients,
+						bills: bills
+					});
+				});
+			}
+		});
 	}
 	else{
 		res.render('auth/client-login', {

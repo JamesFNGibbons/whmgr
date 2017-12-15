@@ -7,6 +7,21 @@ router.get('/client-logout', (req, res) => {
 	}
 });
 
+/**
+  * Route used to change the clients
+  * accodunt to another one.
+*/
+router.post('/change-client', (req, res) => {
+	if(req.session.loggedin){
+		let account = req.body.account;
+		req.session.client_username = account;
+		res.redirect('/clientarea');
+	}
+	else{
+		res.redirect('/');
+	}
+});
+
 router.get('/logout', (req, res) => {
   if(req.session.loggedin){
     req.session.loggedin = false;

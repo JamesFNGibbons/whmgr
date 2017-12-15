@@ -1,3 +1,11 @@
+{{#if bills }}
+  <div class='alert alert-info'>
+    You have {{bills.length}} outstanding bills.
+    <a href='/clientarea/bills' class='pull-right'>
+      View Bills
+    </a>
+  </div>
+{{/if}}
 <div class='panel panel-default'>
   <div class='panel-heading'>FTP / File Manager</div>
   <div class='panel-body'>
@@ -40,7 +48,7 @@
         </a>
       </div>
       <div class='col-md-3 action-icon'>
-        <a href='/clientarea/export-files'>
+        <a href='/clientarea/email/create'>
           <img src='/icons/email-add.svg' width='50px'>
           <span>Add Account</span>
         </a>

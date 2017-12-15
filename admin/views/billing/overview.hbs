@@ -1,0 +1,59 @@
+<div class='page-header'>
+	<h2>Billing Overview</h2>
+</div>	
+<div class='row'>
+	<div class='col-md-12'>
+		<div class='well'>
+			An overview of the bills that have been sent to clients.
+			<a href='/' class='btn btn-primary pull-right'>
+				Go back
+			</a>
+		</div>
+	</div>
+	<div class='col-md-12'>
+		{{#if bill_sent}}
+			<div class='alert alert-success'>
+				You have sent a bill to a client.
+				<a class='close' href='/billing'>
+					&times;
+				</a>
+			</div>
+		{{/if}}
+		{{#if bill_deleted}}
+			<div class='alert alert-success'>
+				You have deleted a clients bill.
+				<a class='close' href='/billing'>
+					&times;
+				</a>
+			</div>
+		{{/if}}
+	</div>
+	<div class='col-md-5'>
+		<h4>Outstanding Bills</h4>
+		<table class='table table-striped'>
+			{{#each bills}}
+				<tr>
+					<td>{{account}}</td>
+					<td>{{product}}</td>
+					<td>&pound;{{ammount}}</td>
+					<td>
+						<form method='post' action='/billing/delete'>
+							<input type='hidden' name='bill_id' value='{{_id}}'>
+							<input type='submit' class='btn btn-danger' value='Delete'>
+						</form>
+					</td>
+				</tr>
+			{{/each}}
+		</table>
+	</div>
+	<div class='col-md-7'>
+		<div class='well'>
+			<h2>Send a client new bill</h2>
+			Send a new bill to a client, through WHMGR
+			<br><br>
+			<a href='/billing/create' class='btn btn-primary btn-lg'>
+				Send new Bill
+			</a>
+		</div>
+	</div>
+</div>

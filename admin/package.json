@@ -20,6 +20,7 @@
     "express-session": "^1.15.5",
     "install": "^0.10.2",
     "linux-user": "^0.1.0",
+    "mongodb": "^3.0.0-rc0",
     "mongoose": "^4.13.6",
     "mysql": "^2.15.0",
     "npm": "^5.6.0",

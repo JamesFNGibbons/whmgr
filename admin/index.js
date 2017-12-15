@@ -9,6 +9,7 @@ const path = require('path');
 const expressmongodb = require('express-mongo-db');
 
 let app = express();
+let whmgr = require('./whmgr');
 
 app.use(cookieParser());
 app.use(cookieSession({
@@ -29,9 +30,8 @@ let hbs = exphbs.create(
 		defaultLayout: 'main',
 		helpers: {
 			get_server_info: require('./helpers/get-server-info.js'),
-			get_setting: function(name){
-				require('./helpers/get-setting.js')(name, app);
-			}
+			ifeq: require('./helpers/ifeq.js'),
+			neq: require('./helpers/neq.js')
 		},
 		extname: ".hbs"
 	}
@@ -47,11 +47,19 @@ glob.sync('./models/**/*.js' ).forEach( function( file ) {
   require( path.resolve( file ) );
 });
 
-app.use('/',require('./routes/home.js'));
-app.use('/auth', require('./routes/auth.js'));
-app.use('/services', require('./routes/services.js'));
-app.use('/accounts', require('./routes/accounts.js'));
-app.use('/do-login', require('./routes/do-login.js'));
-app.use('/databases', require('./routes/databases.js'));
-app.use('/clientarea', require('./routes/clientarea-home.js'));
-app.use('/clientarea/databases', require('./routes/clientarea-databases.js'));
+
+if(whmgr.License.is_valid()){
+	app.use('/',require('./routes/home.js'));
+	app.use('/auth', require('./routes/auth.js'));
+	app.use('/services', require('./routes/services.js'));
+	app.use('/billing', require('./routes/billing.js'));
+	app.use('/accounts', require('./routes/accounts.js'));
+	app.use('/do-login', require('./routes/do-login.js'));
+	app.use('/databases', require('./routes/databases.js'));
+	app.use('/clientarea', require('./routes/clientarea-home.js'));
+	app.use('/clientarea/databases', require('./routes/clientarea-databases.js'));
+	app.use('/clientarea/email', require('./routes/email.js'));
+}
+else{
+	app.use('/*', require('./routes/invalid-license.js'));
+}

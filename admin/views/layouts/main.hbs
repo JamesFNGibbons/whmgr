@@ -6,6 +6,8 @@
 
 		<script src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js'></script>
 		<script src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js'></script>
+
+		<link rel="icon" href="/img/whmgr-favicon.png" type="image/gif">
 	</head>
 	<body>
 		{{#unless pre_login}}
@@ -33,6 +35,33 @@
 							{{{get_server_info}}}
 						</div>
 					</div>
+					{{#if admin_loggedin}}
+						<div class="panel panel-default">
+							<div class='panel-heading'>WHMGR Administration</div>
+							<div class='panel-body'>
+								<img src='/img/whmgr-logo-dark.png' width='40%'>
+								<br><br>
+								{{#if client_username}}
+									<h3>Using Client Account: <b>{{client_username}}</b></h3>
+								{{/if}}
+								<form action='/auth/change-client' method='post'>
+									<div class='form-group'>
+										<label>Change Client Account</label>
+										<select name='account' class='form-control'>
+											{{#each clients}}
+												<option value='{{username}}' default>
+														{{username}}
+													</option>
+											{{/each}}
+										</select>
+									</div>
+									<div class='form-group'>
+										<input type='submit' class='btn btn-primary pull-right' value='Change Client'>
+									</div>
+								</form>
+							</div>
+						</div>
+					{{/if}}
 				</div>
 			</div>
 		{{/unless}}
