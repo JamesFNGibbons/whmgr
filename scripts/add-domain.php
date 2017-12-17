@@ -69,4 +69,11 @@
 	*/
 	print "Reloading apache web server ... \n";
 	system("service apache2 reload", $output);
+	
+	/**
+          * Sort the permissions so that php can execute out
+	  * of the users home drive.
+        */
+	system("chmod -R 755 /home/$username/public_html");	
+
 	print $output . PHP_EOL;

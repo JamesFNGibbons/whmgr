@@ -45,22 +45,24 @@ router.get('/phpmyadmin-auth', (req, res) => {
 */
 router.get('/filemanager', (req, res) => {
 	if(req.session.client_loggedin){
-		// Get the account info
 		req.db.collection('accounts').find({
 			username: req.session.client_username
-		}).toArray((err, docs) => {
+		}).toArray((err, accounts) => {
 			if(err) throw err;
 			else{
-				console.log(docs);
-				if(docs.length > 0){
-					let account = docs[0];
-					let username = account.username;
-					let password = account.password;
-					res.redirect(`http://192.168.0.24/filemanager?username=${username}&password=${password}`);
-				}
-				else{
-					res.end('Invalid account sent.');
-				}
+				req.db.collection('settings').find({
+					name: 'url'
+				}).toArray((err, setting) => {
+					if(err) throw err;
+					else{
+						let url = setting[0].value;
+						let account = accounts[0];
+						let username = account.username;
+						let password = account.password;
+
+						res.redirect(`http://${url}/filemanager?username=${username}&password=${password}&whmgr_login_request`);
+					}
+				});
 			}
 		});
 	}

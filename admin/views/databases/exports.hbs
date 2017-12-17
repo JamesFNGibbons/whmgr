@@ -1,0 +1,67 @@
+<div class='page-header'>
+	<h2>Database Exports</h2>
+</div>
+<div class='well'>
+	Your saved database exports.
+	<a class='btn btn-primary pull-right' href='/clientarea'>
+		Go back
+	</a>
+</div>
+<div class='row'>
+	<div class='col-md-12'>
+		{{#if created}}
+			<div class='alert alert-success'>
+				You have created a new export.
+				<a class='close' href='/clientarea/databases/exports'>
+					&times;
+				</a>
+			</div>
+		{{/if}}
+		{{#if deleted}}
+			<div class='alert alert-success'>
+				You have deleted an export.
+				<a class='close' href='/clientarea/databases/exports'>
+					&times;
+				</a>
+			</div>
+		{{/if}}
+	</div>
+	<div class='col-md-7'>
+		<table class='table table-default'>
+			<th>Export Name</th>
+			<th></th>
+			<th></th>
+			{{#each the_exports}}
+				<tr>
+					<td>{{this}}</td>
+					<td>
+						<form method='post' action='/clientarea/databases/exports/delete'>
+							<input type='hidden' name='the_export' value='{{this}}'>
+							<input type='submit' class='btn btn-danger' value='Delete'>
+						</form>
+					</td>
+					<td>
+						<form method='post' action='/clientarea/databases/exports/get'>
+							<input type='hidden' name='the_export' value='{{this}}'>
+							<input type='submit' class='btn btn-primary' value='Download'>
+						</form>
+					</td>
+				</tr>
+			{{/each}}
+		</table>
+	</div>
+	<div class='col-md-5'>
+		<div class='well'>
+			<h2 style='margin: 0; padding: 0;'>
+				Export a database
+			</h2>
+			<p>
+				Use this wizard to export a database to a .sql file,
+				ready for import on another server.
+			</p>
+			<a class='btn btn-primary btn-lg' href='/clientarea/databases/exports/new'>
+				Export Database
+			</a>
+		</div>
+	</div>
+</div>

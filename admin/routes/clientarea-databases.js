@@ -1,5 +1,159 @@
 const router = require('express').Router();
 const mysql = require('mysql');
+const fs = require('fs');
+const exec = require('child_process').exec;
+
+/**
+  * Route used to delete a users
+  * database export.
+*/
+router.post('/exports/delete', (req, res) => {
+	if(req.session.client_loggedin){
+		if(req.body.the_export){
+			let the_export = req.body.the_export;
+			let account = req.session.client_username;
+			let export_path = `/home/${account}/db-exports/${the_export}`;
+
+			// Delete the export.
+			if(fs.existsSync(export_path)){
+				fs.unlink(export_path, (err) => {
+					if(err) throw err;
+					else{
+						res.redirect('/clientarea/databases/exports?deleted=true');
+					}
+				});
+			}
+			else{
+				res.end('Invalid Export.');
+			}
+		}
+		else{
+			res.end('Invalid export.')
+		}
+	}
+	else{
+		res.redirect('/');
+	}
+});
+
+/**
+  * Route used to download a users
+  * database export file.
+ */
+router.post('/exports/get', (req, res) => {
+	if(req.session.client_loggedin){
+		if(req.body.the_export){
+			let the_export = req.body.the_export;
+			let account = req.session.client_username;
+			let export_path = `/home/${account}/db-exports/${the_export}`;
+
+			if(fs.existsSync(export_path)){
+				res.download(export_path);
+			}
+			else{
+				res.end('The given export does not exist.');
+			}
+		}
+		else{
+			res.end('Invalid db export.');
+		}
+	}
+	else{
+		res.redirect('/');
+	}
+});
+
+/**
+  * Route used to export the data
+  * from the database.
+*/
+router.post('/exports/new', (req, res) => {
+	if(req.session.client_loggedin){
+		let database = req.body.database;
+		let account = req.session.client_username;
+		let date = new Date().toDateString().split(' ').join('');
+		let export_file = `${account}_${database}_${date}.sql`;
+		let export_path = `/home/${account}/db-exports/${export_file}`;
+
+		// Export the data using the mysqldump command
+		req.db.collection('databases').find({
+			database: database
+		}).toArray((err, db) => {
+			if(err) throw err;
+			else{
+				if(db.length > 0) db = db[0];
+				else res.end('Invalid Database.');
+				exec(`mysqldump -u ${db.username} -p${db.password} ${database} > ${export_path}`, (err) => {
+					if(err) throw err;
+					else{
+						res.redirect('/clientarea/databases/exports?exported=true');
+					}
+				});
+			}
+		});
+	}
+	else{
+		res.redirect('/');
+	}
+});
+
+/**
+  * Route used to display the select
+  * database screen, before running
+  * the export.
+*/
+router.get('/exports/new', (req, res) => {
+	if(req.session.client_loggedin){
+		// List the users databases.
+		req.db.collection('databases').find({
+			account: req.session.client_username
+		}).toArray((err, databases) => {
+			if(err) throw err;
+			else{
+				res.render('databases/create-export', {
+					title: "Select Database To Export",
+					databases: databases
+				});
+			}
+		});
+	}
+	else{
+		res.redirect('/');
+	}
+});
+
+/**
+  * Route used to display the view that
+  * shows the database exports.
+*/
+router.get('/exports', (req, res) => {
+	if(req.session.client_loggedin){
+		// Generate the users export path.
+		let exports_path = `/home/${req.session.client_username}/db-exports/`;
+		// Create the db-exports directory if not exists
+		if(!fs.existsSync(exports_path)){
+			fs.mkdir(exports_path);
+			res.redirect('/clientarea/databases/exports');
+		}
+		else{
+			fs.readdir(exports_path, (err, the_exports) => {
+				if(err) throw err;
+				else{
+					res.render('databases/exports', {
+						title: "Database Exports",
+						the_exports: the_exports,
+						has_exports: the_exports.length,
+						deleted: (req.query.deleted == 'true'),
+						created: (req.query.export_created == 'true')
+					});
+				}
+			})
+		}
+	}
+	else{
+		res.redirect('/');
+	}
+});
 
 /**
   * Route used to add a new database to
