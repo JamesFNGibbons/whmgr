@@ -51,6 +51,7 @@
 	// Fix the permissions for the www data file within the directory.
 	print "Setting permissions for the www directory" . PHP_EOL;
 	system("chmod 755 $document_root", $out);
+	system("sudo chmod -R 777 /home/$username/public_html");	
 
 	/**
 	  * Enable the new site that we have just created.
