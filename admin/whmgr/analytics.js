@@ -62,50 +62,53 @@ class Analytics {
 
 				for(let i = 0; i < requests.length; i++){
 					let the_request = requests[i];
-					let system = the_request.split(' ')[12];
 
-					/** 
-					  * Only push the request if the data is
-					  * today.
-					*/
-					let date = the_request.split(' ')[3];
-						date = date.split('[')[1];
-						date = date.split(':')[0];
+					if(the_request !== ''){
+						let system = the_request.split(' ')[12];
+						/** 
+						  * Only push the request if the data is
+						  * today.
+						*/
+						var today_date = the_request.split('- -')[1];
+							today_date = today_date.trim();
+							today_date = today_date.split('[')[1];
+							today_date = today_date.split(':')[0];
 
-					// Define the months of the year.
-					let months = [
-						'',
-						'Jan',
-						'Feb',
-						'Mar',
-						'Apr',
-						'May',
-						'Jun',
-						'Jul',
-						'Aug',
-						'Sep',
-						'Oct',
-						'Nov',
-						'Dec'					
-					];
+						// Define the months of the year.
+						let months = [
+							'',
+							'Jan',
+							'Feb',
+							'Mar',
+							'Apr',
+							'May',
+							'Jun',
+							'Jul',
+							'Aug',
+							'Sep',
+							'Oct',
+							'Nov',
+							'Dec'					
+						];
 
-					/** 
-					  * Generate todays date to match
-					  * the format of apache2's log date.
-					*/
-					let dateObj = new Date();
-					let month = months[('0' + (dateObj.getMonth() + 1)).slice(-2)];
-					let day = ('0' + dateObj.getDate()).slice(-2);
-					let year = dateObj.getFullYear();
-					let shortDate = day + '/' + month + '/' + year;
+						/** 
+						  * Generate todays date to match
+						  * the format of apache2's log date.
+						*/
+						let dateObj = new Date();
+						let month = months[('0' + (dateObj.getMonth() + 1)).slice(-2)];
+						let day = ('0' + dateObj.getDate()).slice(-2);
+						let year = dateObj.getFullYear();
+						let shortDate = day + '/' + month + '/' + year;
 
-					if(date == shortDate){
-						views.push({
-							ip: the_request.split(' ')[0],
-							time: the_request.split(' ')[3],
-							resource: the_request.split(' ')[6],
-							system: system
-						});
+						if(today_date == shortDate){
+							views.push({
+								ip: the_request.split(' ')[0],
+								time: the_request.split(' ')[3],
+								resource: the_request.split(' ')[6],
+								system: system
+							});
+						}
 					}
 				}
 
