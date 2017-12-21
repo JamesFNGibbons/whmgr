@@ -16,6 +16,15 @@ class Analytics {
 	}
 
 	/**
+	  * Function used to check if the user has
+	  * any analytics data.
+	*/
+	has_analytics(callback){
+		let account = this.account;
+		callback(fs.existsSync(`/home/${account}/logs/access.log`));
+	}
+
+	/**
 	  * Function used to get all requests.
 	  * @return The views.
 	*/
